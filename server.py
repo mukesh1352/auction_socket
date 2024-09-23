@@ -57,8 +57,48 @@ def buy_player(c):
     pass
 
 def see_player(c):
-    # Implement your logic for checking remaining players here
-    pass
+    """Fetch and send the list of remaining players to the client."""
+    try:
+        # Connect to the database (assuming you already have a connection function)
+        db_connection = database()
+        if not db_connection:
+            raise Exception("Database connection failed")
+
+        cursor = db_connection.cursor()
+
+        # Query to select remaining players (where `price` is NULL, indicating unsold)
+        query = "SELECT player_name, nationality, role FROM players WHERE price IS NULL;"
+        cursor.execute(query)
+
+        # Fetch all remaining players
+        remaining_players = cursor.fetchall()
+
+        if remaining_players:
+            response = "Remaining Players:\n"
+            for player in remaining_players:
+                response += f"Name: {player[0]}, Nationality: {player[1]}, Role: {player[2]}\n"
+        else:
+            response = "No remaining players available.\n"
+
+        # Send the list of players to the client
+        c.sendall(response.encode())
+
+    except mysql.connector.Error as e:
+        error_message = f"Database error: {str(e)}"
+        print(error_message)
+        c.sendall(b"An error occurred while fetching the player data from the database.\n")
+    
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        c.sendall(b"An error occurred while fetching the player details.\n")
+
+    finally:
+        # Clean up
+        if cursor:
+            cursor.close()
+        if db_connection and db_connection.is_connected():
+            db_connection.close()
+
 
 def team_players(c):
     # Implement your logic for checking team players here
