@@ -1,12 +1,3 @@
-I’ve read **both the client and server code carefully** and understood what this project actually does (socket programming + MySQL + multithreading).
-Below is a **clean, professional, recruiter-ready README.md** that accurately reflects your implementation and **does not overclaim**.
-
-You can paste this directly into
-👉 `auction_socket/README.md`
-
----
-
-````markdown
 # Auction Socket – IPL Auction Management System
 
 Auction Socket is a **client–server based auction management system** built using
